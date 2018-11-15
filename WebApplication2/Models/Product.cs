@@ -25,11 +25,11 @@ namespace WebApplication2.Models
             this.connectionString = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
         }
 
-        public IList<Product> Products
+        public IDictionary<int, Product> Products
         {
             get
             {
-                List<Product> result = new List<Product>();
+                Dictionary<int, Product> result = new Dictionary<int, Product>();
                 Product p = null;
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -50,7 +50,7 @@ namespace WebApplication2.Models
                                     p.Stock = reader.GetInt32(2);
                                     p.Description = reader.GetString(3);
 
-                                    result.Add(p);
+                                    result.Add(p.Id, p);
                                 }
                             }
                             reader.Close();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication2.Models;
@@ -14,13 +15,29 @@ namespace WebApplication2.Controllers
         // GET: Product
         public ActionResult Index()
         {
-            return View(productsAdapter.Products);
+            return View(productsAdapter.Products.Values);
         }
 
         // GET: Product/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Product p = null;
+
+            if (!productsAdapter.Products.TryGetValue(id.Value, out p))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                return View(p);
+            }
+
+            
         }
 
         // GET: Product/Create
